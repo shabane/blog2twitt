@@ -1,40 +1,77 @@
 """Welcome to Reflex! This file outlines the steps to create a basic app."""
 from rxconfig import config
-
 import reflex as rx
+import random
+import asyncio
 
 docs_url = "https://reflex.dev/docs/getting-started/introduction"
 filename = f"{config.app_name}/{config.app_name}.py"
 
 
 class State(rx.State):
-    """The app state."""
+    blog: str = ''
+    posts = []
 
-    pass
+    @rx.var
+    def blog_count(self):
+        return len(self.blog)
 
+    def convert(self):
+        self.posts = []
+        post_count = len(self.blog)//280
+        tch = 272 # template chars [xx/yy]
+        start_on = 0
+
+        if post_count > 1:
+            for i in range(1, post_count+1):
+                self.posts.append(f'[{i}/{post_count}] {self.blog[start_on:i*tch]}')
+                start_on = i*tch
+            self.posts.append(f'[{i+1}/{post_count}] {self.blog[start_on:]}')
+
+
+def colored_box(txt: str) -> rx.component:
+    return rx.box(
+        rx.text(txt),
+        border='solid 1px #1ABC9C',
+        padding='1%',
+        _hover={
+                'color': '#85929E',
+                'font_size':'2em',
+            },
+        margin_top='1%',
+        width='100%',
+        )
 
 def index() -> rx.Component:
-    return rx.fragment(
-        rx.color_mode_button(rx.color_mode_icon(), float="right"),
-        rx.vstack(
-            rx.heading("Welcome to Reflex!", font_size="2em"),
-            rx.box("Get started by editing ", rx.code(filename, font_size="1em")),
-            rx.link(
-                "Check out our docs!",
-                href=docs_url,
-                border="0.1em solid",
-                padding="0.5em",
-                border_radius="0.5em",
-                _hover={
-                    "color": rx.color_mode_cond(
-                        light="rgb(107,99,246)",
-                        dark="rgb(179, 175, 255)",
-                    )
-                },
+    return rx.vstack(
+        rx.box(
+            rx.text_area(
+                placeholder='write your blog here...',
+                height='300px',
+                font_size='2em',
+                on_change=State.set_blog,
+                ),
+            rx.button(
+                'Convert',
+                margin_top='1%',
+                bg_color='#3498DB',
+                color='#FFF',
+                on_click=State.convert
+                ),
+            rx.text(
+                f'chars: {State.blog_count}',
             ),
-            spacing="1.5em",
-            font_size="2em",
-            padding_top="10%",
+            width='70%',
+            margin_top='3%',
+            height='90%',
+            text_align='center',
+        ),
+        rx.vstack(
+            rx.foreach(
+                State.posts,
+                colored_box,
+            ),
+            width='60%',
         ),
     )
 
