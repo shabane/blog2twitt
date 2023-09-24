@@ -19,15 +19,19 @@ class State(rx.State):
         self.posts = []
         post_count = len(self.blog)//280
         posts_count = len(self.posts)/280
-        tch = 272 # template chars [xx/yy]
+        tch = 272 # mines template chars [xx/yy]
         start_on = 0
-
         i = 1
-        if post_count > 1:
+
+        if post_count <= 1:
+            self.posts.append(f'[{i}/{post_count+1}] {self.blog[start_on:]}')
+            return
+        else:
             for i in range(1, post_count+1):
                 self.posts.append(f'[{i}/{post_count+1}] {self.blog[start_on:i*tch]}')
                 start_on = i*tch
         self.posts.append(f'[{i+1}/{post_count+1}] {self.blog[start_on:]}')
+
 
 
 def colored_box(txt: str) -> rx.component:
@@ -35,9 +39,9 @@ def colored_box(txt: str) -> rx.component:
         rx.text(txt),
         border='solid 1px #1ABC9C',
         padding='1%',
+        font_size='2em',
         _hover={
                 'color': '#85929E',
-                'font_size':'2em',
             },
         margin_top='1%',
         width='100%',
@@ -74,6 +78,7 @@ def index() -> rx.Component:
             ),
             width='60%',
         ),
+        margin_bottom='10px',
     )
 
 
