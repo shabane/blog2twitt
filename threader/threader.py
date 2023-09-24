@@ -1,8 +1,7 @@
 """Welcome to Reflex! This file outlines the steps to create a basic app."""
 from rxconfig import config
 import reflex as rx
-import random
-import asyncio
+
 
 docs_url = "https://reflex.dev/docs/getting-started/introduction"
 filename = f"{config.app_name}/{config.app_name}.py"
@@ -19,14 +18,16 @@ class State(rx.State):
     def convert(self):
         self.posts = []
         post_count = len(self.blog)//280
+        posts_count = len(self.posts)/280
         tch = 272 # template chars [xx/yy]
         start_on = 0
 
+        i = 1
         if post_count > 1:
             for i in range(1, post_count+1):
-                self.posts.append(f'[{i}/{post_count}] {self.blog[start_on:i*tch]}')
+                self.posts.append(f'[{i}/{post_count+1}] {self.blog[start_on:i*tch]}')
                 start_on = i*tch
-            self.posts.append(f'[{i+1}/{post_count}] {self.blog[start_on:]}')
+        self.posts.append(f'[{i+1}/{post_count+1}] {self.blog[start_on:]}')
 
 
 def colored_box(txt: str) -> rx.component:
