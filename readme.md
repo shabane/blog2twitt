@@ -12,6 +12,8 @@ or any other texts, knowing that how much thread posts its gonna be. and add a p
 
 this app will help you with that, it will add a **post count** prefix to each thread posts.
 
+![text to twitter threads](assets/shot.jpg)
+
 ---
 
 ### Themes
