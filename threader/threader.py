@@ -18,19 +18,19 @@ class State(rx.State):
     def convert(self):
         self.posts = []
         post_count = len(self.blog)//280
-        posts_count = len(self.posts)/280
-        tch = 272 # mines template chars [xx/yy]
+        posts_count = round(len(self.blog)/280)
+        tch = 272 # twitter limit chars mines template chars [xx/yy]
         start_on = 0
         i = 1
 
-        if post_count <= 1:
-            self.posts.append(f'[{i}/{post_count+1}] {self.blog[start_on:]}')
+        if posts_count <= 1:
+            self.posts.append(f'[{i}/{posts_count+1}] {self.blog[start_on:]}')
             return
         else:
-            for i in range(1, post_count+1):
-                self.posts.append(f'[{i}/{post_count+1}] {self.blog[start_on:i*tch]}')
+            for i in range(1, posts_count+1):
+                self.posts.append(f'[{i}/{posts_count+1}] {self.blog[start_on:i*tch]}')
                 start_on = i*tch
-        self.posts.append(f'[{i+1}/{post_count+1}] {self.blog[start_on:]}')
+        self.posts.append(f'[{i+1}/{posts_count+1}] {self.blog[start_on:]}')
 
 
 
@@ -84,5 +84,5 @@ def index() -> rx.Component:
 
 # Add state and page to the app.
 app = rx.App()
-app.add_page(index)
+app.add_page(index, title='blog 2 twitt')
 app.compile()
