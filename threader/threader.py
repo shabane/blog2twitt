@@ -23,7 +23,7 @@ class State(rx.State):
         start_on = 0
         i = 1
 
-        if posts_count <= 1:
+        if posts_count < 1:
             self.posts.append(f'[{i}/{posts_count+1}] {self.blog[start_on:]}')
             return
         else:
