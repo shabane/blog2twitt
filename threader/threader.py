@@ -24,13 +24,14 @@ class State(rx.State):
         i = 1
 
         if posts_count < 1:
-            self.posts.append(f'[{i}/{posts_count+1}] {self.blog[start_on:]}')
+            self.posts.append(f'[{i}/{posts_count}] {self.blog[start_on:]}')
             return
         else:
             for i in range(1, posts_count+1):
-                self.posts.append(f'[{i}/{posts_count+1}] {self.blog[start_on:i*tch]}')
+                self.posts.append(f'[{i}/{posts_count}] {self.blog[start_on:i*tch]}')
                 start_on = i*tch
-        self.posts.append(f'[{i+1}/{posts_count+1}] {self.blog[start_on:]}')
+        if(self.blog[start_on:]):
+            self.posts.append(f'[{i+1}/{posts_count}] {self.blog[start_on:]}')
 
 
 
